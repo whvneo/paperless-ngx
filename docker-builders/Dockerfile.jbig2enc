@@ -9,13 +9,13 @@ LABEL org.opencontainers.image.description="A intermediate image with jbig2enc b
 ARG DEBIAN_FRONTEND=noninteractive
 
 ARG BUILD_PACKAGES="\
-  build-essential \
-  automake \
-  libtool \
-  libleptonica-dev \
-  zlib1g-dev \
-  git \
-  ca-certificates"
+  build-essential=12.9 \
+  git=1:2.30.2* \
+  automake=1:1.16.3* \
+  libtool=2.4.6* \
+  libleptonica-dev=1.79.0* \
+  zlib1g-dev=1:1.2.11* \
+  ca-certificates=20210119"
 
 WORKDIR /usr/src/jbig2enc
 
@@ -32,8 +32,6 @@ RUN apt-get update --quiet \
 ARG JBIG2ENC_VERSION
 
 RUN set -eux \
-  && git clone --quiet --branch $JBIG2ENC_VERSION https://github.com/agl/jbig2enc .
-RUN set -eux \
-  && ./autogen.sh
-RUN set -eux \
+  && git clone --quiet --branch ${JBIG2ENC_VERSION} https://github.com/agl/jbig2enc . \
+  && ./autogen.sh \
   && ./configure && make

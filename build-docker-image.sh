@@ -12,9 +12,9 @@
 #	./build-docker-image.sh Dockerfile -t paperless-ngx:my-awesome-feature
 #	./build-docker-image.sh docker-builders/Dockerfile.qpdf -t paperless-ngx-build-qpdf:x.y.z
 
-set -eux
+set -eu
 
-if ! command -v jq;  then
+if ! command -v jq &> /dev/null ;  then
 	echo "jq required"
 	exit 1
 elif [ ! -f "$1" ]; then
@@ -36,6 +36,8 @@ frontend_version=$(git rev-parse --abbrev-ref HEAD)
 psycopg2_git_tag=${psycopg2_version//./_}
 # pikepdf uses vX.Y.Z
 pikepdf_git_tag="v${pikepdf_version}"
+
+export DOCKER_BUILDKIT=1
 
 docker build --file "$1" \
 	--build-arg JBIG2ENC_VERSION="${jbig2enc_version}" \

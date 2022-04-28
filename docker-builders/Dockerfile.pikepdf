@@ -9,7 +9,7 @@
 ARG REPO="paperless-ngx/paperless-ngx"
 
 ARG QPDF_VERSION
-FROM ghcr.io/${REPO}/builder/qpdf:${QPDF_VERSION} as qpdf-builder
+FROM qpdf:test as qpdf-builder
 
 # This does nothing, except provide a name for a copy below
 
@@ -20,15 +20,15 @@ LABEL org.opencontainers.image.description="A intermediate image with pikepdf wh
 ARG DEBIAN_FRONTEND=noninteractive
 
 ARG BUILD_PACKAGES="\
-  build-essential \
-  git \
-  libjpeg62-turbo-dev \
-  zlib1g-dev \
-  libgnutls28-dev \
-  libxml2-dev \
-  libxslt1-dev \
-  python3-dev \
-  python3-pip"
+  build-essential=12.9 \
+  git=1:2.30.2* \
+  python3-dev=3.9.2* \
+  python3-pip=20.3.4* \
+  libjpeg62-turbo-dev=1:2.0.6* \
+  zlib1g-dev=1:1.2.11* \
+  libgnutls28-dev=3.7.1* \
+  libxml2-dev=2.9.10* \
+  libxslt1-dev=1.1.34*""
 
 WORKDIR /usr/src
 

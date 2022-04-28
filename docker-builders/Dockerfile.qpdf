@@ -5,16 +5,16 @@ LABEL org.opencontainers.image.description="A intermediate image with qpdf built
 ARG DEBIAN_FRONTEND=noninteractive
 
 ARG BUILD_PACKAGES="\
-  build-essential \
-  debhelper \
-  debian-keyring \
-  devscripts \
-  equivs  \
-  libtool \
-  libjpeg62-turbo-dev \
-  libgnutls28-dev \
+  build-essential=12.9 \
+  debhelper=13.3.4* \
+  debian-keyring=2021.07.26* \
+  devscripts=2.21.3* \
+  equivs=2.3.1*  \
+  libtool=2.4.6* \
+  libjpeg62-turbo-dev=1:2.0.6* \
+  libgnutls28-dev=3.7.1* \
   packaging-dev \
-  zlib1g-dev"
+  zlib1g-dev=1:1.2.11*"
 
 WORKDIR /usr/src
 
@@ -48,5 +48,5 @@ RUN set -eux \
   && rm -rf libtests \
   && DEBEMAIL=hello@paperless-ngx.com debchange --bpo \
   && export DEB_BUILD_OPTIONS="terse nocheck nodoc parallel=2" \
-  && dpkg-buildpackage --build=binary --unsigned-source --unsigned-changes \
+  && dpkg-buildpackage --build=binary \
   && ls -ahl ../*.deb
