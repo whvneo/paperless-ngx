@@ -134,8 +134,11 @@ class Consumer(LoggingMixin):
 
         self.log("info", f"Executing pre-consume script {settings.PRE_CONSUME_SCRIPT}")
 
+        env = os.environ.copy()
+        env["FILE_PATH"] = self.path
+
         try:
-            Popen((settings.PRE_CONSUME_SCRIPT, self.path)).wait()
+            Popen((settings.PRE_CONSUME_SCRIPT, self.path), env=env).wait()
         except Exception as e:
             self._fail(
                 MESSAGE_PRE_CONSUME_SCRIPT_ERROR,
@@ -159,19 +162,30 @@ class Consumer(LoggingMixin):
             f"Executing post-consume script {settings.POST_CONSUME_SCRIPT}",
         )
 
+        env = os.environ.copy()
+        env["DOCUMENT_ID"] = str(document.pk)
+        env["GENERATED_FILE_NAME"] = document.get_public_filename()
+        env["SOURCE_PATH"] = os.path.normpath(document.source_path)
+        env["THUMBNAIL_PATH"] = os.path.normpath(document.thumbnail_path)
+        env["DOWNLOAD_URL"] = reverse("document-download", kwargs={"pk": document.pk})
+        env["THUMBNAIL_URL"] = reverse("document-thumb", kwargs={"pk": document.pk})
+        env["CORRESPONDENTS"] = str(document.correspondent)
+        env["TAGS"] = str(",".join(document.tags.all().values_list("name", flat=True)))
+
         try:
             Popen(
                 (
                     settings.POST_CONSUME_SCRIPT,
-                    str(document.pk),
-                    document.get_public_filename(),
-                    os.path.normpath(document.source_path),
-                    os.path.normpath(document.thumbnail_path),
-                    reverse("document-download", kwargs={"pk": document.pk}),
-                    reverse("document-thumb", kwargs={"pk": document.pk}),
-                    str(document.correspondent),
-                    str(",".join(document.tags.all().values_list("name", flat=True))),
+                    env["DOCUMENT_ID"],
+                    env["GENERATED_FILE_NAME"],
+                    env["SOURCE_PATH"],
+                    env["THUMBNAIL_PATH"],
+                    env["DOWNLOAD_URL"],
+                    env["THUMBNAIL_URL"],
+                    env["CORRESPONDENTS"],
+                    env["TAGS"],
                 ),
+                env=env,
             ).wait()
         except Exception as e:
             self._fail(
