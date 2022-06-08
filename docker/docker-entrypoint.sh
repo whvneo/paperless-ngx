@@ -10,8 +10,8 @@ map_uidgid() {
 	USERMAP_NEW_GID=${USERMAP_GID:-${USERMAP_ORIG_GID:-$USERMAP_NEW_UID}}
 	if [[ ${USERMAP_NEW_UID} != "${USERMAP_ORIG_UID}" || ${USERMAP_NEW_GID} != "${USERMAP_ORIG_GID}" ]]; then
 		echo "Mapping UID and GID for paperless:paperless to $USERMAP_NEW_UID:$USERMAP_NEW_GID"
-		usermod -o -u "${USERMAP_NEW_UID}" paperless
-		groupmod -o -g "${USERMAP_NEW_GID}" paperless
+		usermod --non-unique --uid "${USERMAP_NEW_UID}" paperless
+		groupmod --non-unique --gid "${USERMAP_NEW_GID}" paperless
 	fi
 }
 
@@ -39,11 +39,11 @@ initialize() {
 
 	local tmp_dir="/tmp/paperless"
 	echo "Creating directory ${tmp_dir}"
-	mkdir -p "${tmp_dir}"
+	mkdir --parents "${tmp_dir}"
 
 	set +e
 	echo "Adjusting permissions of paperless files. This may take a while."
-	chown -R paperless:paperless ${tmp_dir}
+	chown --recursive paperless:paperless ${tmp_dir}
 	for dir in "${export_dir}" "${DATA_DIR}" "${MEDIA_ROOT_DIR}"; do
 		find "${dir}" -not \( -user paperless -and -group paperless \) -exec chown paperless:paperless {} +
 	done
@@ -82,7 +82,7 @@ install_languages() {
 		fi
 
 		echo "Installing package $pkg..."
-		if ! apt-get -y install "$pkg" &>/dev/null; then
+		if ! apt-get --yes install "$pkg" &>/dev/null; then
 			echo "Could not install $pkg"
 			exit 1
 		fi

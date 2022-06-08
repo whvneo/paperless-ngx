@@ -107,7 +107,7 @@ RUN set -eux \
   echo "Installing system packages" \
     && apt-get update \
     && apt-get install --yes --quiet --no-install-recommends ${RUNTIME_PACKAGES} \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm --recursive --force /var/lib/apt/lists/* \
   && echo "Installing supervisor" \
     && python3 -m pip install --default-timeout=1000 --upgrade --no-cache-dir supervisor==4.2.4
 
@@ -131,11 +131,11 @@ RUN --mount=type=bind,readwrite,source=docker,target=./ \
     && cp supervisord.conf /etc/supervisord.conf \
   && echo "Setting up Docker scripts" \
     && cp docker-entrypoint.sh /sbin/docker-entrypoint.sh \
-    && chmod 755 /sbin/docker-entrypoint.sh \
+    && chmod u=rwx,go=rx /sbin/docker-entrypoint.sh \
     && cp docker-prepare.sh /sbin/docker-prepare.sh \
-    && chmod 755 /sbin/docker-prepare.sh \
+    && chmod u=rwx,go=rx /sbin/docker-prepare.sh \
     && cp wait-for-redis.py /sbin/wait-for-redis.py \
-    && chmod 755 /sbin/wait-for-redis.py \
+    && chmod u=rwx,go=rx /sbin/wait-for-redis.py \
   && echo "Installing managment commands" \
     && chmod +x install_management_commands.sh \
     && ./install_management_commands.sh
@@ -179,8 +179,8 @@ RUN set -eux \
   && echo "Installing Python requirements" \
     && python3 -m pip install --default-timeout=1000 --no-cache-dir -r ../requirements.txt \
   && echo "Cleaning up image" \
-    && apt-get -y purge ${BUILD_PACKAGES} \
-    && apt-get -y autoremove --purge \
+    && apt-get --yes purge ${BUILD_PACKAGES} \
+    && apt-get --yes autoremove --purge \
     && apt-get clean --yes \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/* \
@@ -200,7 +200,7 @@ COPY --from=compile-frontend /src/src/documents/static/frontend/ ./documents/sta
 RUN set -eux \
   && addgroup --gid 1000 paperless \
   && useradd --uid 1000 --gid paperless --home-dir /usr/src/paperless paperless \
-  && chown -R paperless:paperless ../ \
+  && chown --recursive paperless:paperless ../ \
   && gosu paperless python3 manage.py collectstatic --clear --no-input \
   && gosu paperless python3 manage.py compilemessages
 
