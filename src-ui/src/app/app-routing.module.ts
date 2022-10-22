@@ -4,6 +4,7 @@ import { AppFrameComponent } from './components/app-frame/app-frame.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component'
 import { DocumentDetailComponent } from './components/document-detail/document-detail.component'
 import { DocumentListComponent } from './components/document-list/document-list.component'
+import { CategoryListComponent } from './components/manage/category-list/category-list.component'
 import { CorrespondentListComponent } from './components/manage/correspondent-list/correspondent-list.component'
 import { DocumentTypeListComponent } from './components/manage/document-type-list/document-type-list.component'
 import { LogsComponent } from './components/manage/logs/logs.component'
@@ -30,6 +31,7 @@ const routes: Routes = [
       { path: 'asn/:id', component: DocumentAsnComponent },
       { path: 'tags', component: TagListComponent },
       { path: 'documenttypes', component: DocumentTypeListComponent },
+      { path: 'categories', component: CategoryListComponent },
       { path: 'correspondents', component: CorrespondentListComponent },
       { path: 'storagepaths', component: StoragePathListComponent },
       { path: 'logs', component: LogsComponent },

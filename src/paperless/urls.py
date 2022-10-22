@@ -10,6 +10,7 @@ from django.views.generic import RedirectView
 from documents.views import AcknowledgeTasksView
 from documents.views import BulkDownloadView
 from documents.views import BulkEditView
+from documents.views import CategoryViewSet
 from documents.views import CorrespondentViewSet
 from documents.views import DocumentTypeViewSet
 from documents.views import IndexView
@@ -31,6 +32,7 @@ from rest_framework.authtoken import views
 from rest_framework.routers import DefaultRouter
 
 api_router = DefaultRouter()
+api_router.register(r"categories", CategoryViewSet)
 api_router.register(r"correspondents", CorrespondentViewSet)
 api_router.register(r"document_types", DocumentTypeViewSet)
 api_router.register(r"documents", UnifiedSearchViewSet)

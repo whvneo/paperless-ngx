@@ -1,5 +1,13 @@
-import { MatchingModel } from './matching-model'
+import { Observable } from 'rxjs';
+import { MatchingModel } from './matching-model';
+import { PaperlessCategory } from './paperless-category';
 
 export interface PaperlessCorrespondent extends MatchingModel {
-  last_correspondence?: Date
-}
+
+  category$?: Observable<PaperlessCategory>
+
+  category?: number
+
+   last_correspondence?: Date
+
+ }

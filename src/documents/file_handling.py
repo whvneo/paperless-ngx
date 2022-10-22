@@ -152,12 +152,21 @@ def generate_filename(doc, counter=0, append_gpg=True, archive_filename=False):
             )
 
             if doc.correspondent:
+                if doc.correspondent.category:
+                    category = pathvalidate.sanitize_filename(
+                        doc.correspondent.category.name,
+                        replacement_text="-",
+                    )
+                else:
+                    category = "-none-"
+
                 correspondent = pathvalidate.sanitize_filename(
                     doc.correspondent.name,
                     replacement_text="-",
                 )
             else:
                 correspondent = "-none-"
+                category = "-none-"
 
             if doc.document_type:
                 document_type = pathvalidate.sanitize_filename(
@@ -178,6 +187,7 @@ def generate_filename(doc, counter=0, append_gpg=True, archive_filename=False):
 
             path = filename_format.format(
                 title=pathvalidate.sanitize_filename(doc.title, replacement_text="-"),
+                category=category,
                 correspondent=correspondent,
                 document_type=document_type,
                 created=datetime.date.isoformat(local_created),

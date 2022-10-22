@@ -3,6 +3,7 @@ from django_filters.rest_framework import BooleanFilter
 from django_filters.rest_framework import Filter
 from django_filters.rest_framework import FilterSet
 
+from .models import Category
 from .models import Correspondent
 from .models import Document
 from .models import DocumentType
@@ -15,6 +16,10 @@ ID_KWARGS = ["in", "exact"]
 INT_KWARGS = ["exact", "gt", "gte", "lt", "lte", "isnull"]
 DATE_KWARGS = ["year", "month", "day", "date__gt", "gt", "date__lt", "lt"]
 
+class CategoryFilterSet(FilterSet):
+    class Meta:
+        model = Category
+        fields = {"name": CHAR_KWARGS}
 
 class CorrespondentFilterSet(FilterSet):
     class Meta:

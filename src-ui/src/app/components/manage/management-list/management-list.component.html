@@ -17,6 +17,7 @@
   <thead>
     <tr>
       <th scope="col" sortable="name" [currentSortField]="sortField" [currentSortReverse]="sortReverse" (sort)="onSort($event)" i18n>Name</th>
+      <!-- <th scope="col" sortable="category" [currentSortField]="sortField" [currentSortReverse]="sortReverse" (sort)="onSort($event)" i18n>Category</th> -->
       <th scope="col" class="d-none d-sm-table-cell" sortable="matching_algorithm" [currentSortField]="sortField" [currentSortReverse]="sortReverse" (sort)="onSort($event)" i18n>Matching</th>
       <th scope="col" sortable="document_count" [currentSortField]="sortField" [currentSortReverse]="sortReverse" (sort)="onSort($event)" i18n>Document count</th>
       <th scope="col" *ngFor="let column of extraColumns" sortable="{{column.key}}" [currentSortField]="sortField" [currentSortReverse]="sortReverse" (sort)="onSort($event)">{{column.name}}</th>
@@ -26,6 +27,13 @@
   <tbody>
     <tr *ngFor="let object of data">
       <td scope="row">{{ object.name }}</td>
+      <!--
+      <td scope="row">
+        <ng-container *ngIf="object.category">
+          {{(object.category$ | async)?.name}}
+        </ng-container>
+      </td>
+    -->
       <td scope="row" class="d-none d-sm-table-cell">{{ getMatching(object) }}</td>
       <td scope="row">{{ object.document_count }}</td>
       <td scope="row" *ngFor="let column of extraColumns">

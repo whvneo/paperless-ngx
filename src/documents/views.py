@@ -55,6 +55,7 @@ from .bulk_download import ArchiveOnlyStrategy
 from .bulk_download import OriginalAndArchiveStrategy
 from .bulk_download import OriginalsOnlyStrategy
 from .classifier import load_classifier
+from .filters import CategoryFilterSet
 from .filters import CorrespondentFilterSet
 from .filters import DocumentFilterSet
 from .filters import DocumentTypeFilterSet
@@ -64,7 +65,11 @@ from .matching import match_correspondents
 from .matching import match_document_types
 from .matching import match_storage_paths
 from .matching import match_tags
+<<<<<<< Updated upstream
 from .models import Comment
+=======
+from .models import Category
+>>>>>>> Stashed changes
 from .models import Correspondent
 from .models import Document
 from .models import DocumentType
@@ -77,6 +82,7 @@ from .parsers import parse_date_generator
 from .serialisers import AcknowledgeTasksViewSerializer
 from .serialisers import BulkDownloadSerializer
 from .serialisers import BulkEditSerializer
+from .serialisers import CategorySerializer
 from .serialisers import CorrespondentSerializer
 from .serialisers import DocumentListSerializer
 from .serialisers import DocumentSerializer
@@ -133,6 +139,19 @@ class IndexView(TemplateView):
         ] = f"frontend/{self.get_frontend_language()}/apple-touch-icon.png"  # noqa: E501
         return context
 
+class CategoryViewSet(ModelViewSet):
+    model = Category
+
+    queryset = Category.objects.all()
+
+    serializer_class = CategorySerializer
+    pagination_class = StandardPagination
+    permission_classes = (IsAuthenticated,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filterset_class = CategoryFilterSet
+    ordering_fields = (
+        "name",
+)
 
 class CorrespondentViewSet(ModelViewSet):
     model = Correspondent

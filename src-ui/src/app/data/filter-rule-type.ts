@@ -35,6 +35,8 @@ export const FILTER_TITLE_CONTENT = 19
 export const FILTER_FULLTEXT_QUERY = 20
 export const FILTER_FULLTEXT_MORELIKE = 21
 
+export const FILTER_CATEGORY = 26
+
 export const FILTER_RULE_TYPES: FilterRuleType[] = [
   {
     id: FILTER_TITLE,
@@ -55,6 +57,13 @@ export const FILTER_RULE_TYPES: FilterRuleType[] = [
     filtervar: 'archive_serial_number',
     datatype: 'number',
     multi: false,
+  },
+  {
+    id: FILTER_CATEGORY,
+    filtervar: "category__id",
+    isnull_filtervar: "category__isnull",
+    datatype: "category",
+    multi: false
   },
   {
     id: FILTER_CORRESPONDENT,

@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .models import Category
 from .models import Correspondent
 from .models import Document
 from .models import DocumentType
@@ -8,12 +9,17 @@ from .models import SavedViewFilterRule
 from .models import StoragePath
 from .models import Tag
 
+class CategoryAdmin(admin.ModelAdmin):
+
+    list_display = ("name",)
+    list_filter = ("name",)
+
 
 class CorrespondentAdmin(admin.ModelAdmin):
 
-    list_display = ("name", "match", "matching_algorithm")
-    list_filter = ("matching_algorithm",)
-    list_editable = ("match", "matching_algorithm")
+    list_display = ("name", "category", "match", "matching_algorithm")
+    list_filter = ("matching_algorithm","category", )
+    list_editable = ("match", "category", "matching_algorithm")
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -112,6 +118,7 @@ class StoragePathAdmin(admin.ModelAdmin):
     list_editable = ("path", "match", "matching_algorithm")
 
 
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Correspondent, CorrespondentAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(DocumentType, DocumentTypeAdmin)

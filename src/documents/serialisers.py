@@ -14,6 +14,7 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
 from . import bulk_edit
+from .models import Category
 from .models import Correspondent
 from .models import Document
 from .models import DocumentType
@@ -71,6 +72,11 @@ class MatchingModelSerializer(serializers.ModelSerializer):
                 )
         return match
 
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Category
+        fields = ("id", "name",)
 
 class CorrespondentSerializer(MatchingModelSerializer):
 
@@ -82,6 +88,7 @@ class CorrespondentSerializer(MatchingModelSerializer):
             "id",
             "slug",
             "name",
+            "category",
             "match",
             "matching_algorithm",
             "is_insensitive",
