@@ -65,11 +65,8 @@ from .matching import match_correspondents
 from .matching import match_document_types
 from .matching import match_storage_paths
 from .matching import match_tags
-<<<<<<< Updated upstream
 from .models import Comment
-=======
 from .models import Category
->>>>>>> Stashed changes
 from .models import Correspondent
 from .models import Document
 from .models import DocumentType
